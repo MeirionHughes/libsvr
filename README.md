@@ -1,7 +1,7 @@
 # libsvr
 native binding of online svr
 
-# Credits
+### Credits
 
 Online SVR is the copyright of Francesco Parrella. http://onlinesvr.altervista.org/
 
