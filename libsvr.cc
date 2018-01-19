@@ -2,7 +2,9 @@
 
 using namespace std;
 using namespace v8;
+using namespace onlinesvr;
 
+using v8::Array;
 using v8::Context;
 using v8::Function;
 using v8::FunctionCallbackInfo;
@@ -17,53 +19,55 @@ using v8::Value;
 
 void InitAll(Local<Object> exports)
 {
-  MyObject::Init(exports);
+  __OnlineSVR::Init(exports);
 }
 
 NODE_MODULE(NODE_GYP_MODULE_NAME, InitAll)
 
-Persistent<Function> MyObject::constructor;
+Persistent<Function> __OnlineSVR::constructor;
 
-MyObject::MyObject(double value) : value_(value)
+__OnlineSVR::__OnlineSVR(double value) : value_(value)
 {
+  this->_native = new OnlineSVR();
 }
 
-MyObject::~MyObject()
+__OnlineSVR::~__OnlineSVR()
 {
+  delete this->_native;
 }
 
-void MyObject::Init(Local<Object> exports)
+void __OnlineSVR::Init(Local<Object> exports)
 {
   Isolate *isolate = exports->GetIsolate();
 
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(isolate, New);
-  tpl->SetClassName(String::NewFromUtf8(isolate, "MyObject"));
+  tpl->SetClassName(String::NewFromUtf8(isolate, "OnlineSVR"));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
   // Prototype
-  NODE_SET_PROTOTYPE_METHOD(tpl, "plusOne", PlusOne);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "train", Train);
 
   constructor.Reset(isolate, tpl->GetFunction());
-  exports->Set(String::NewFromUtf8(isolate, "MyObject"),
+  exports->Set(String::NewFromUtf8(isolate, "OnlineSVR"),
                tpl->GetFunction());
 }
 
-void MyObject::New(const FunctionCallbackInfo<Value> &args)
+void __OnlineSVR::New(const FunctionCallbackInfo<Value> &args)
 {
   Isolate *isolate = args.GetIsolate();
 
   if (args.IsConstructCall())
   {
-    // Invoked as constructor: `new MyObject(...)`
+    // Invoked as constructor: `new __OnlineSVR(...)`
     double value = args[0]->IsUndefined() ? 0 : args[0]->NumberValue();
-    MyObject *obj = new MyObject(value);
+    __OnlineSVR *obj = new __OnlineSVR(value);
     obj->Wrap(args.This());
     args.GetReturnValue().Set(args.This());
   }
   else
   {
-    // Invoked as plain function `MyObject(...)`, turn into construct call.
+    // Invoked as plain function `__OnlineSVR(...)`, turn into construct call.
     const int argc = 1;
     Local<Value> argv[argc] = {args[0]};
     Local<Context> context = isolate->GetCurrentContext();
@@ -74,12 +78,31 @@ void MyObject::New(const FunctionCallbackInfo<Value> &args)
   }
 }
 
-void MyObject::PlusOne(const FunctionCallbackInfo<Value> &args)
+void __OnlineSVR::Train(const FunctionCallbackInfo<Value> &args)
 {
   Isolate *isolate = args.GetIsolate();
+  Local<Context> ctx = isolate->GetCurrentContext();
 
-  MyObject *obj = ObjectWrap::Unwrap<MyObject>(args.Holder());
-  obj->value_ += 1;
+  __OnlineSVR *obj = ObjectWrap::Unwrap<__OnlineSVR>(args.Holder());
+
+  v8::Handle<v8::Value> arg0(args[0]);
+
+  if (arg0->IsArray())
+  {
+    Local<Array> arr = v8::Local<v8::Array>::Cast(arg0);    
+
+    uint32_t length = arr->Length();
+
+    Vector<double>* vec = new Vector<double>(length);
+
+    for(int index=0; index< length; index++){
+      arr->Get(ctx, index).ToLocalChecked()->ToNumber(isolate)->NumberValue();
+    }
+
+    double value = args[1]->ToNumber(isolate)->NumberValue();
+
+    obj->_native->Train(vec, value);
+  }
 
   args.GetReturnValue().Set(Number::New(isolate, obj->value_));
 }

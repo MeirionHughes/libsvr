@@ -1,0 +1,76 @@
+{
+  "configurations": [
+      {
+          "name": "Mac",
+          "includePath": [
+              "${workspaceRoot}",
+              "/usr/include",
+              "/usr/local/include"
+          ],
+          "defines": [],
+          "browse": {
+              "path": [
+                  "/usr/include",
+                  "/usr/local/include",
+                  "${workspaceRoot}"
+              ],
+              "limitSymbolsToIncludedHeaders": true,
+              "databaseFilename": ""
+          },
+          "intelliSenseMode": "clang-x64",
+          "macFrameworkPath": [
+              "/System/Library/Frameworks",
+              "/Library/Frameworks"
+          ]
+      },
+      {
+          "name": "Linux",
+          "includePath": [
+              "${workspaceRoot}",
+              "/usr/include",
+              "/usr/local/include"
+          ],
+          "defines": [],
+          "browse": {
+              "path": [
+                  "/usr/include",
+                  "/usr/local/include",
+                  "${workspaceRoot}"
+              ],
+              "limitSymbolsToIncludedHeaders": true,
+              "databaseFilename": ""
+          },
+          "intelliSenseMode": "clang-x64"
+      },
+      {
+          "name": "Win32",
+          "includePath": [
+              "${workspaceRoot}",
+              "${workspaceRoot}/node_modules/nan",
+              "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/*",
+              "C:/Program Files (x86)/Windows Kits/10/Include/10.0.10240.0/um",
+              "C:/Program Files (x86)/Windows Kits/10/Include/10.0.10240.0/ucrt",
+              "C:/Program Files (x86)/Windows Kits/10/Include/10.0.10240.0/shared",
+              "C:/Program Files (x86)/Windows Kits/10/Include/10.0.10240.0/winrt"
+          ],
+          "defines": [
+              "_DEBUG",
+              "UNICODE"
+          ],
+          "browse": {
+              "path": [
+                  "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/*",
+                  "C:/Program Files (x86)/Windows Kits/10/Include/10.0.10240.0/um",
+                  "C:/Program Files (x86)/Windows Kits/10/Include/10.0.10240.0/ucrt",
+                  "C:/Program Files (x86)/Windows Kits/10/Include/10.0.10240.0/shared",
+                  "C:/Program Files (x86)/Windows Kits/10/Include/10.0.10240.0/winrt",
+                  "${workspaceRoot}"
+              ],
+              "limitSymbolsToIncludedHeaders": true,
+              "databaseFilename": ""
+          },
+          "intelliSenseMode": "msvc-x64"
+      }
+  ],
+  "version": 3
+}
