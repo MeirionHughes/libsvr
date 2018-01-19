@@ -1,0 +1,46 @@
+{
+  "name": "libsvr",
+  "version": "0.1.0",
+  "description": "native-binding of online-svr",
+  "gypfile": true,
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "rebuild": "node-gyp rebuild",
+    "pretest": "node-gyp build",
+    "test": "nyc node_modules/mocha/bin/_mocha --harmony test/*.ts"
+  },
+  "main": "index.js",
+  "engines": {
+    "node": ">=9.0.0"
+  },
+  "nyc": {
+    "exclude": [
+      "node_modules/",
+      "test/",
+      "coverage/"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "source-map-support/register",
+      "ts-node/register"
+    ],
+    "reporter": [
+      "text-summary",
+      "lcov"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  },
+  "dependencies": {
+    "bindings": "^1.3.0",
+    "nan": "^2.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^9.3.0",
+    "ts-node": "^4.1.0",
+    "typescript": "^2.5.3"
+  }
+}

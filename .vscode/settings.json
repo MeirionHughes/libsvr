@@ -1,0 +1,10 @@
+{
+  "files.associations": {
+    "fstream": "cpp",
+    "streambuf": "cpp",
+    "xiosbase": "cpp",
+    "xlocale": "cpp",
+    "xlocnum": "cpp",
+    "xmemory": "cpp"
+  }
+}
