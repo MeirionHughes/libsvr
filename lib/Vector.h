@@ -807,8 +807,9 @@ namespace onlinesvr
 	template<class T>
 	void Vector<T>::Print ()
 	{
+		std::cout << "length: " << this->Length << std::endl;
 		for (int i=0; i<this->Length; i++) {
-			cout << this->Values[i] << "\t";
+			cout << this->Values[i] << " ";
 		}
 		cout << endl;
 	}
@@ -816,7 +817,7 @@ namespace onlinesvr
 	template<class T>
 	void Vector<T>::Print(char *VectorName)
 	{
-		cout << VectorName << " \t";
+		cout << VectorName << " ";
 		Print();
 	}
 

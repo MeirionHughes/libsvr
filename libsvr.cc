@@ -47,6 +47,7 @@ void __OnlineSVR::Init(Local<Object> exports)
 
   // Prototype
   NODE_SET_PROTOTYPE_METHOD(tpl, "train", Train);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "predict", Predict);
 
   constructor.Reset(isolate, tpl->GetFunction());
   exports->Set(String::NewFromUtf8(isolate, "OnlineSVR"),
@@ -89,20 +90,51 @@ void __OnlineSVR::Train(const FunctionCallbackInfo<Value> &args)
 
   if (arg0->IsArray())
   {
-    Local<Array> arr = v8::Local<v8::Array>::Cast(arg0);    
+    Local<Array> arr = v8::Local<v8::Array>::Cast(arg0);
 
     uint32_t length = arr->Length();
 
-    Vector<double>* vec = new Vector<double>(length);
+    std::cout << length;
 
-    for(int index=0; index< length; index++){
-      arr->Get(ctx, index).ToLocalChecked()->ToNumber(isolate)->NumberValue();
-    }
+    Vector<double> *vec = new Vector<double>(length);
+
+    for (int index = 0; index < length; index++)
+    {
+      vec->Add(arr->Get(ctx, index).ToLocalChecked()->ToNumber(isolate)->NumberValue());
+    }   
 
     double value = args[1]->ToNumber(isolate)->NumberValue();
 
-    obj->_native->Train(vec, value);
-  }
+    int index = obj->_native->Train(vec, value);
 
-  args.GetReturnValue().Set(Number::New(isolate, obj->value_));
+    args.GetReturnValue().Set(Number::New(isolate, index));
+  }
+}
+
+void __OnlineSVR::Predict(const FunctionCallbackInfo<Value> &args)
+{
+  Isolate *isolate = args.GetIsolate();
+  Local<Context> ctx = isolate->GetCurrentContext();
+
+  __OnlineSVR *obj = ObjectWrap::Unwrap<__OnlineSVR>(args.Holder());
+
+  v8::Handle<v8::Value> arg0(args[0]);
+
+  if (arg0->IsArray())
+  {
+    Local<Array> arr = v8::Local<v8::Array>::Cast(arg0);
+
+    uint32_t length = arr->Length();
+
+    Vector<double> *vec = new Vector<double>(length);
+
+    for (int index = 0; index < length; index++)
+    {
+      vec->Add(arr->Get(ctx, index).ToLocalChecked()->ToNumber(isolate)->NumberValue());
+    }    
+    
+    double value = obj->_native->Predict(vec);
+
+    args.GetReturnValue().Set(Number::New(isolate, value));
+  }
 }

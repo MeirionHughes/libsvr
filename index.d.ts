@@ -8,6 +8,7 @@ export enum KernelType {
 }
 
 export class OnlineSVR {
-  constructor(value: number);
-  train(vector: number[], value: number);  
+  constructor();
+  train(vector: number[], value: number): number;
+  predict(vector: number[]): number;
 }

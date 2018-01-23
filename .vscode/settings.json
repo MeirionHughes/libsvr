@@ -8,6 +8,11 @@
     "xmemory": "cpp",
     "iosfwd": "cpp",
     "xstring": "cpp",
-    "vector": "cpp"
+    "vector": "cpp",
+    "system_error": "cpp",
+    "type_traits": "cpp",
+    "xstddef": "cpp",
+    "xtr1common": "cpp",
+    "ostream": "cpp"
   }
 }
