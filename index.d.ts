@@ -9,6 +9,15 @@ export enum KernelType {
 
 export class OnlineSVR {
   constructor();
+  clear();
   train(vector: number[], value: number): number;
   predict(vector: number[]): number;
+  setC(c: number):void;
+  getC():number;;
+  setEpsilon(epsilon: number): void;
+  getEpsilon(): number;
+  setKernel(type: KernelType):void;
+  getKernel():KernelType;
+  setKernelParam(param:number): void;
+  getKernelParam():number;
 }

@@ -29,6 +29,8 @@ Persistent<Function> __OnlineSVR::constructor;
 __OnlineSVR::__OnlineSVR(double value) : value_(value)
 {
   this->_native = new OnlineSVR();
+
+  this->_native->SetVerbosity(0);
 }
 
 __OnlineSVR::~__OnlineSVR()
@@ -48,6 +50,16 @@ void __OnlineSVR::Init(Local<Object> exports)
   // Prototype
   NODE_SET_PROTOTYPE_METHOD(tpl, "train", Train);
   NODE_SET_PROTOTYPE_METHOD(tpl, "predict", Predict);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "clear", Clear);
+    
+  NODE_SET_PROTOTYPE_METHOD(tpl, "setC", SetC);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "getC", GetC);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "setEpsilon", SetEpsilon);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "getEpsilon", GetEpsilon);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "setKernel", SetKernel);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "getKernel", GetKernel);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "setKernelParam", SetKernelParam);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "getKernelParam", GetKernelParam);
 
   constructor.Reset(isolate, tpl->GetFunction());
   exports->Set(String::NewFromUtf8(isolate, "OnlineSVR"),
@@ -94,14 +106,12 @@ void __OnlineSVR::Train(const FunctionCallbackInfo<Value> &args)
 
     uint32_t length = arr->Length();
 
-    std::cout << length;
-
     Vector<double> *vec = new Vector<double>(length);
 
     for (int index = 0; index < length; index++)
     {
       vec->Add(arr->Get(ctx, index).ToLocalChecked()->ToNumber(isolate)->NumberValue());
-    }   
+    }
 
     double value = args[1]->ToNumber(isolate)->NumberValue();
 
@@ -131,10 +141,108 @@ void __OnlineSVR::Predict(const FunctionCallbackInfo<Value> &args)
     for (int index = 0; index < length; index++)
     {
       vec->Add(arr->Get(ctx, index).ToLocalChecked()->ToNumber(isolate)->NumberValue());
-    }    
-    
+    }
+
     double value = obj->_native->Predict(vec);
 
     args.GetReturnValue().Set(Number::New(isolate, value));
   }
+}
+
+void __OnlineSVR::Clear(const FunctionCallbackInfo<Value> &args)
+{
+  Isolate *isolate = args.GetIsolate();
+  Local<Context> ctx = isolate->GetCurrentContext();
+
+  __OnlineSVR *obj = ObjectWrap::Unwrap<__OnlineSVR>(args.Holder());
+
+  obj->_native->Clear();
+}
+
+void __OnlineSVR::SetC(const FunctionCallbackInfo<Value> &args)
+{
+  Isolate *isolate = args.GetIsolate();
+  Local<Context> ctx = isolate->GetCurrentContext();
+
+  __OnlineSVR *obj = ObjectWrap::Unwrap<__OnlineSVR>(args.Holder());
+
+  double arg = args[0]->ToNumber(isolate)->NumberValue();
+
+  obj->_native->SetC(arg);
+}
+
+void __OnlineSVR::GetC(const FunctionCallbackInfo<Value> &args)
+{
+  Isolate *isolate = args.GetIsolate();
+  Local<Context> ctx = isolate->GetCurrentContext();
+
+  __OnlineSVR *obj = ObjectWrap::Unwrap<__OnlineSVR>(args.Holder());
+
+  args.GetReturnValue().Set(Number::New(isolate, obj->_native->GetC()));
+}
+
+void __OnlineSVR::SetEpsilon(const FunctionCallbackInfo<Value> &args)
+{
+  Isolate *isolate = args.GetIsolate();
+  Local<Context> ctx = isolate->GetCurrentContext();
+
+  __OnlineSVR *obj = ObjectWrap::Unwrap<__OnlineSVR>(args.Holder());
+
+  double arg = args[0]->ToNumber(isolate)->NumberValue();
+
+  obj->_native->SetEpsilon(arg);
+}
+
+void __OnlineSVR::GetEpsilon(const FunctionCallbackInfo<Value> &args)
+{
+  Isolate *isolate = args.GetIsolate();
+  Local<Context> ctx = isolate->GetCurrentContext();
+
+  __OnlineSVR *obj = ObjectWrap::Unwrap<__OnlineSVR>(args.Holder());
+
+  args.GetReturnValue().Set(Number::New(isolate, obj->_native->GetEpsilon()));
+}
+
+void __OnlineSVR::SetKernel(const FunctionCallbackInfo<Value> &args)
+{
+  Isolate *isolate = args.GetIsolate();
+  Local<Context> ctx = isolate->GetCurrentContext();
+
+  __OnlineSVR *obj = ObjectWrap::Unwrap<__OnlineSVR>(args.Holder());
+
+  int arg = static_cast<int>(args[0]->ToNumber(isolate)->NumberValue());
+
+  obj->_native->SetKernelType(arg);
+}
+
+void __OnlineSVR::GetKernel(const FunctionCallbackInfo<Value> &args)
+{
+  Isolate *isolate = args.GetIsolate();
+  Local<Context> ctx = isolate->GetCurrentContext();
+
+  __OnlineSVR *obj = ObjectWrap::Unwrap<__OnlineSVR>(args.Holder());
+
+  args.GetReturnValue().Set(Number::New(isolate, obj->_native->GetKernelType()));
+}
+
+void __OnlineSVR::SetKernelParam(const FunctionCallbackInfo<Value> &args)
+{
+  Isolate *isolate = args.GetIsolate();
+  Local<Context> ctx = isolate->GetCurrentContext();
+
+  __OnlineSVR *obj = ObjectWrap::Unwrap<__OnlineSVR>(args.Holder());
+
+  double arg = args[0]->ToNumber(isolate)->NumberValue();
+
+  obj->_native->SetKernelParam(arg);
+}
+
+void __OnlineSVR::GetKernelParam(const FunctionCallbackInfo<Value> &args)
+{
+  Isolate *isolate = args.GetIsolate();
+  Local<Context> ctx = isolate->GetCurrentContext();
+
+  __OnlineSVR *obj = ObjectWrap::Unwrap<__OnlineSVR>(args.Holder());
+
+  args.GetReturnValue().Set(Number::New(isolate, obj->_native->GetKernelParam()));
 }
