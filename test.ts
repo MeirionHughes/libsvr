@@ -3,41 +3,28 @@ import { OnlineSVR, KernelType } from './index';
 let svr = new OnlineSVR();
 
 svr.clear();
-svr.setC(3);
+svr.setC(30);
 svr.setEpsilon(0.01);
-svr.setKernel(KernelType.RBF_GAUSSIAN);
-svr.setKernelParam(10);
+svr.setKernel(KernelType.RBF);
+svr.setKernelParam(30);
 
-let data = [1, 2, 3, 4, 5, 2, 1, 4, 5, 3, 1, 4, 3, 2, 7, 8]
+let set = [
+  {x:[-1, -1], y: -1},
+  {x:[1, -1], y: 1},
+  {x:[-1, 1], y: 1},
+  {x:[1, 1], y: -1}
+]
 
-let set = data.map((x1, i1) => {
-  let i0 = Math.max(0, i1 - 1);
-  let i2 = Math.min(data.length - 1, i1 + 1);
-  let x0 = data[i0];
-  let x2 = data[i2];
-  return { x: [x0, x1], y: ((x2 > x1) ? 1 : -1) }
-});
-
-function predict(last, now) {
-  let y = svr.predict([last, now]);
-
-  let mag = Math.abs(y) >= 0.25;
-  let act = (Math.sign(y) >= 1.0 && mag) ? "BUY" : "SELL";
-
-  console.log(`${last}>${now} = ${act}`);
-}
-
-console.log("training...");
-
-for (let [i1, { x, y }] of set.entries()) {
+for(let {x, y} of set){
   svr.train(x, y);
 }
 
-console.log("predict");
-
-for (let [i1, x1] of data.entries()) {
-  let i0 = Math.max(0, i1 - 1);
-  let i2 = Math.min(data.length - 1, i1 + 1);
-
-  predict(data[i0], data[i1]);
+for(let {x, y} of set){
+  let $class = Math.sign(svr.predict(x));
+  console.log($class == Math.sign(y));
 }
+
+console.log("supports", svr.getSupportSetElementsNumber());
+console.log("errors", svr.getErrorSetElementsNumber());
+console.log("remaining", svr.getRemainingSetElementsNumber());
+

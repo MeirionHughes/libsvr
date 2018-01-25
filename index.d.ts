@@ -12,12 +12,22 @@ export class OnlineSVR {
   clear();
   train(vector: number[], value: number): number;
   predict(vector: number[]): number;
-  setC(c: number):void;
-  getC():number;;
+  forget(index: number[]): void;
+  setC(c: number): void;
+  getC(): number;;
   setEpsilon(epsilon: number): void;
   getEpsilon(): number;
-  setKernel(type: KernelType):void;
-  getKernel():KernelType;
-  setKernelParam(param:number): void;
-  getKernelParam():number;
+  setKernel(type: KernelType): void;
+  getKernel(): KernelType;
+  setKernelParam(param: number): void;
+  getKernelParam(): number;
+
+  getSamplesTrainedNumber():number;
+  getSupportSetElementsNumber():number;
+  getErrorSetElementsNumber():number;
+  getRemainingSetElementsNumber():number;
+
+  getSupportSetIndexes():number[];
+  getErrorSetIndexes():number[];
+  getRemainingSetIndexes():number[];
 }
